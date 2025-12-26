@@ -25,6 +25,9 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# GridFS bucket for file storage
+fs_bucket = AsyncIOMotorGridFSBucket(db)
+
 # JWT settings
 JWT_SECRET = os.environ.get('JWT_SECRET', 'kulikari_family_secret_2024')
 JWT_ALGORITHM = 'HS256'
