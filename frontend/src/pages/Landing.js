@@ -11,8 +11,30 @@ const Landing = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ email: '', password: '', name: '' });
   const [loading, setLoading] = useState(false);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [musicInitialized, setMusicInitialized] = useState(false);
   const audioRef = React.useRef(null);
+
+  // Initialize music on first user interaction
+  React.useEffect(() => {
+    const initAudio = async () => {
+      if (audioRef.current && !musicInitialized) {
+        audioRef.current.volume = 0.4;
+        try {
+          await audioRef.current.play();
+          setIsMusicPlaying(true);
+          setMusicInitialized(true);
+        } catch (error) {
+          console.log('Autoplay prevented. User interaction required.');
+          setIsMusicPlaying(false);
+        }
+      }
+    };
+
+    // Try to play after a short delay
+    const timer = setTimeout(initAudio, 1000);
+    return () => clearTimeout(timer);
+  }, [musicInitialized]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
