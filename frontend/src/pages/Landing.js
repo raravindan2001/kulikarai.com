@@ -67,10 +67,10 @@ const Landing = () => {
           className="mt-20 grid lg:grid-cols-2 gap-12 items-center"
         >
           <div>
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-fraunces font-bold text-textPrimary leading-tight mb-6">
-              Your family's <span className="gradient-text">home</span> on the web
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-fraunces font-bold text-white leading-tight mb-6">
+              Your family's <span className="text-yellow-400">divine home</span> on the web
             </h2>
-            <p className="text-xl text-textSecondary font-nunito mb-10 leading-relaxed">
+            <p className="text-xl text-blue-100 font-nunito mb-10 leading-relaxed">
               Share photos, chat with loved ones, and keep everyone connected. 
               Kulikari brings your family closer, no matter the distance.
             </p>
@@ -78,7 +78,7 @@ const Landing = () => {
               <button
                 data-testid="get-started-hero-btn"
                 onClick={() => setShowAuth(true)}
-                className="bg-coral text-white px-10 py-4 rounded-full font-nunito font-semibold text-lg hover:bg-[#FF8787] transition-all hover:scale-105 shadow-lg"
+                className="bg-yellow-500 text-blue-900 px-10 py-4 rounded-full font-nunito font-semibold text-lg hover:bg-yellow-400 transition-all hover:scale-105 shadow-xl"
               >
                 Create Family Network
               </button>
@@ -86,9 +86,9 @@ const Landing = () => {
           </div>
           <div className="relative">
             <img 
-              src="https://customer-assets.emergentagent.com/job_family-moments-11/artifacts/7tm1glyf_OIP.jfif" 
-              alt="Happy family" 
-              className="rounded-3xl shadow-2xl w-full h-[500px] object-cover"
+              src="https://customer-assets.emergentagent.com/job_family-moments-11/artifacts/8k2sbwz2_oppiliappan-39-1.jpg" 
+              alt="Divine blessings for your family" 
+              className="rounded-3xl shadow-2xl w-full h-[500px] object-cover border-4 border-yellow-400/30"
             />
           </div>
         </motion.div>
