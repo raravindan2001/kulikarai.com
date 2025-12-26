@@ -274,7 +274,7 @@ const Landing = () => {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-stone-800 border-amber-700 text-amber-50 placeholder-amber-400/50 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-800 border-amber-600 text-amber-50 placeholder-amber-400/50 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"
                     required={!isLogin}
                   />
                 </div>
