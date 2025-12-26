@@ -186,10 +186,10 @@ const Landing = () => {
           className="mt-20 grid lg:grid-cols-2 gap-12 items-center"
         >
           <div>
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-fraunces font-bold text-white leading-tight mb-6">
-              Your family's <span className="text-blue-400">divine home</span> on the web
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-serif font-bold text-amber-50 leading-tight mb-6">
+              Your family's <span className="text-amber-400">divine home</span> on the web
             </h2>
-            <p className="text-xl text-gray-300 font-nunito mb-10 leading-relaxed">
+            <p className="text-xl text-amber-100 leading-relaxed mb-10">
               Share photos, chat with loved ones, and keep everyone connected. 
               Kulikari brings your family closer, no matter the distance.
             </p>
@@ -197,7 +197,7 @@ const Landing = () => {
               <button
                 data-testid="get-started-hero-btn"
                 onClick={() => setShowAuth(true)}
-                className="bg-blue-500 text-white px-10 py-4 rounded-full font-nunito font-semibold text-lg hover:bg-blue-600 transition-all hover:scale-105 shadow-xl"
+                className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-10 py-4 rounded-full font-semibold text-lg hover:from-amber-700 hover:to-orange-700 transition-all hover:scale-105 shadow-xl"
               >
                 Create Family Network
               </button>
