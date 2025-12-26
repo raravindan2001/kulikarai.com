@@ -92,7 +92,10 @@ const Landing = () => {
       
       {/* Music Control Button */}
       <button
-        onClick={toggleMusic}
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleMusic();
+        }}
         className="fixed top-24 right-8 z-50 bg-yellow-500/90 backdrop-blur-sm text-blue-900 p-3 rounded-full shadow-xl hover:bg-yellow-400 transition-all hover:scale-110 group"
         title={isMusicPlaying ? "Pause Music" : "Play Music"}
       >
@@ -102,12 +105,28 @@ const Landing = () => {
             <span className="hidden group-hover:inline-block text-xs font-semibold pr-2">Pause</span>
           </div>
         ) : (
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 animate-pulse">
             <VolumeX className="w-5 h-5" />
             <span className="hidden group-hover:inline-block text-xs font-semibold pr-2">Play</span>
           </div>
         )}
       </button>
+      
+      {/* Music Prompt - Shows if not playing */}
+      {!isMusicPlaying && !musicInitialized && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 2 }}
+          className="fixed top-40 right-8 z-40 bg-yellow-500 text-blue-900 px-4 py-3 rounded-2xl shadow-xl text-sm font-nunito font-semibold cursor-pointer hover:bg-yellow-400 transition-all"
+          onClick={toggleMusic}
+        >
+          <div className="flex items-center space-x-2">
+            <Volume2 className="w-4 h-4 animate-pulse" />
+            <span>Click to enable divine music 🎵</span>
+          </div>
+        </motion.div>
+      )}
       
       {/* Music Info Badge */}
       {isMusicPlaying && (
