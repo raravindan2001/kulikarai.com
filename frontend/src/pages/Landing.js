@@ -136,7 +136,7 @@ const Landing = () => {
           animate={{ opacity: 1, y: 0 }}
           className="fixed top-40 right-8 z-40 bg-blue-950/80 backdrop-blur-sm text-yellow-400 px-4 py-2 rounded-full shadow-lg text-xs font-nunito"
         >
-          🎵 South Indian Instrumental
+          🎻 Soothing Violin Melody
         </motion.div>
       )}
       
