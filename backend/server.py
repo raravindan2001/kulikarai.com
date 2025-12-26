@@ -694,7 +694,7 @@ async def get_messages(conversation_id: str, user_id: str = Depends(get_current_
 
 @api_router.get("/messages/group/{group_id}", response_model=List[Message])
 async def get_group_messages(group_id: str, user_id: str = Depends(get_current_user)):
-    messages = await db.messages.find({" group_id": group_id}, {"_id": 0}).sort("created_at", 1).to_list(1000)
+    messages = await db.messages.find({"group_id": group_id}, {"_id": 0}).sort("created_at", 1).to_list(1000)
     return messages
 
 @api_router.delete("/messages/{message_id}")
