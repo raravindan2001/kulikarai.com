@@ -86,9 +86,13 @@ const PhotoDetail = () => {
               className="bg-white rounded-3xl overflow-hidden shadow-lg"
             >
               <img
-                src={photo?.url}
+                src={photo?.file_id ? `${API}/photos/file/${photo.file_id}` : photo?.url}
                 alt={photo?.caption || 'Family photo'}
                 className="w-full h-auto"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://via.placeholder.com/800x600?text=Image+Not+Found';
+                }}
               />
             </motion.div>
           </div>
