@@ -268,7 +268,7 @@ async def update_user(update: UserUpdate, user_id: str = Depends(get_current_use
 @api_router.post("/users/relationships")
 async def add_relationship(rel: RelationshipAdd, user_id: str = Depends(get_current_user)):
     relationship = {"user_id": rel.user_id, "relation_type": rel.relation_type}
-    await db.users.update_one({" id": user_id}, {"$push": {"relationships": relationship}})
+    await db.users.update_one({"id": user_id}, {"$push": {"relationships": relationship}})
     return {"message": "Relationship added"}
 
 @api_router.post("/users/add-parent")
