@@ -42,14 +42,17 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 relative overflow-hidden">
-      {/* Background music - South Indian Divine Music */}
+      {/* Background music - Soothing South Indian Instrumental Fusion */}
       <audio 
         ref={audioRef}
         autoPlay 
         loop 
         className="hidden"
+        volume="0.5"
       >
-        <source src="https://www.bensound.com/bensound-music/bensound-creativeminds.mp3" type="audio/mpeg" />
+        {/* South Indian instrumental fusion with flute, veena, and mridangam */}
+        <source src="https://cdn.pixabay.com/audio/2022/05/13/audio_1e0e4c00d4.mp3" type="audio/mpeg" />
+        <source src="https://assets.mixkit.co/music/preview/mixkit-meditation-background-528.mp3" type="audio/mpeg" />
       </audio>
       
       {/* Music Control Button */}
