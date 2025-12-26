@@ -383,7 +383,7 @@ async def get_photo_file(file_id: str):
         content_type = grid_out.metadata.get("content_type", "image/jpeg") if grid_out.metadata else "image/jpeg"
         
         return StreamingResponse(
-            io.BytesIO(contents),
+            BytesIO(contents),
             media_type=content_type,
             headers={
                 "Content-Disposition": f"inline; filename={grid_out.filename}"
