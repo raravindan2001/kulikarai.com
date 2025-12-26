@@ -47,13 +47,13 @@ const Landing = () => {
           className="py-8 flex justify-between items-center"
         >
           <div className="flex items-center space-x-2">
-            <Heart className="w-8 h-8 text-coral" fill="#FF6B6B" />
-            <h1 className="text-3xl font-fraunces font-bold text-textPrimary">Kulikari</h1>
+            <Heart className="w-8 h-8 text-yellow-400" fill="#FBBF24" />
+            <h1 className="text-3xl font-fraunces font-bold text-white">Kulikari</h1>
           </div>
           <button
             data-testid="auth-toggle-btn"
             onClick={() => setShowAuth(true)}
-            className="bg-coral text-white px-8 py-3 rounded-full font-nunito font-semibold hover:bg-[#FF8787] transition-all hover:scale-105"
+            className="bg-yellow-500 text-blue-900 px-8 py-3 rounded-full font-nunito font-semibold hover:bg-yellow-400 transition-all hover:scale-105 shadow-lg"
           >
             Get Started
           </button>
