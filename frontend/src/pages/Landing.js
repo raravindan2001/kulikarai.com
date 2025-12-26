@@ -58,11 +58,32 @@ const Landing = () => {
       {/* Music Control Button */}
       <button
         onClick={toggleMusic}
-        className="fixed top-24 right-8 z-50 bg-yellow-500 text-blue-900 p-3 rounded-full shadow-lg hover:bg-yellow-400 transition-all"
+        className="fixed top-24 right-8 z-50 bg-yellow-500/90 backdrop-blur-sm text-blue-900 p-3 rounded-full shadow-xl hover:bg-yellow-400 transition-all hover:scale-110 group"
         title={isMusicPlaying ? "Pause Music" : "Play Music"}
       >
-        {isMusicPlaying ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+        {isMusicPlaying ? (
+          <div className="flex items-center space-x-2">
+            <Volume2 className="w-5 h-5" />
+            <span className="hidden group-hover:inline-block text-xs font-semibold pr-2">Pause</span>
+          </div>
+        ) : (
+          <div className="flex items-center space-x-2">
+            <VolumeX className="w-5 h-5" />
+            <span className="hidden group-hover:inline-block text-xs font-semibold pr-2">Play</span>
+          </div>
+        )}
       </button>
+      
+      {/* Music Info Badge */}
+      {isMusicPlaying && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed top-40 right-8 z-40 bg-blue-950/80 backdrop-blur-sm text-yellow-400 px-4 py-2 rounded-full shadow-lg text-xs font-nunito"
+        >
+          🎵 South Indian Instrumental
+        </motion.div>
+      )}
       
       {/* Background decorations */}
       <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400/10 rounded-full blur-3xl"></div>
