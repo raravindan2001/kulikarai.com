@@ -166,13 +166,13 @@ const Landing = () => {
           className="py-8 flex justify-between items-center"
         >
           <div className="flex items-center space-x-2">
-            <Heart className="w-8 h-8 text-blue-400" fill="#60A5FA" />
-            <h1 className="text-3xl font-fraunces font-bold text-white">Kulikari</h1>
+            <Heart className="w-8 h-8 text-amber-400" fill="#FCD34D" />
+            <h1 className="text-3xl font-serif font-bold text-amber-50">Kulikari</h1>
           </div>
           <button
             data-testid="auth-toggle-btn"
             onClick={() => setShowAuth(true)}
-            className="bg-blue-500 text-white px-8 py-3 rounded-full font-nunito font-semibold hover:bg-blue-600 transition-all hover:scale-105 shadow-lg"
+            className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-8 py-3 rounded-full font-semibold hover:from-amber-700 hover:to-orange-700 transition-all hover:scale-105 shadow-lg"
           >
             Get Started
           </button>
