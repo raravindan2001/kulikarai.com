@@ -101,9 +101,13 @@ const Photos = () => {
               >
                 <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover-lift">
                   <img
-                    src={photo.url}
+                    src={photo.file_id ? `${API}/photos/file/${photo.file_id}` : photo.url}
                     alt={photo.caption || 'Family photo'}
                     className="w-full h-auto"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
+                    }}
                   />
                   {photo.caption && (
                     <div className="p-4">
