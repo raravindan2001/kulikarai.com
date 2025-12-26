@@ -62,6 +62,12 @@ manager = ConnectionManager()
 # Create the main app
 app = FastAPI()
 
+# Health check endpoint (must be at root level for Kubernetes)
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Kubernetes probes"""
+    return {"status": "healthy", "service": "kulikarai-api"}
+
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
