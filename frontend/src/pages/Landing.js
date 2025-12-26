@@ -11,30 +11,72 @@ const Landing = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ email: '', password: '', name: '' });
   const [loading, setLoading] = useState(false);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [musicInitialized, setMusicInitialized] = useState(false);
-  const audioRef = React.useRef(null);
+  const [voicePlayed, setVoicePlayed] = useState(false);
+  const [isVoicePlaying, setIsVoicePlaying] = useState(false);
 
-  // Initialize music on first user interaction
-  React.useEffect(() => {
-    const initAudio = async () => {
-      if (audioRef.current && !musicInitialized) {
-        audioRef.current.volume = 0.4;
-        try {
-          await audioRef.current.play();
-          setIsMusicPlaying(true);
-          setMusicInitialized(true);
-        } catch (error) {
-          console.log('Autoplay prevented. User interaction required.');
-          setIsMusicPlaying(false);
-        }
+  // Function to play welcome voice message
+  const playWelcomeVoice = () => {
+    if ('speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance('Welcome to Kulikari Family');
+      
+      // Configure voice settings
+      utterance.rate = 0.9; // Slightly slower for clarity
+      utterance.pitch = 1.1; // Slightly higher pitch for warmth
+      utterance.volume = 0.8; // 80% volume
+      
+      // Try to use a female voice if available
+      const voices = window.speechSynthesis.getVoices();
+      const femaleVoice = voices.find(voice => 
+        voice.name.includes('Female') || 
+        voice.name.includes('Samantha') ||
+        voice.name.includes('Google UK English Female')
+      );
+      if (femaleVoice) {
+        utterance.voice = femaleVoice;
       }
-    };
+      
+      utterance.onstart = () => {
+        setIsVoicePlaying(true);
+      };
+      
+      utterance.onend = () => {
+        setIsVoicePlaying(false);
+        setVoicePlayed(true);
+      };
+      
+      utterance.onerror = () => {
+        setIsVoicePlaying(false);
+      };
+      
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
-    // Try to play after a short delay
-    const timer = setTimeout(initAudio, 1000);
-    return () => clearTimeout(timer);
-  }, [musicInitialized]);
+  // Initialize voices
+  React.useEffect(() => {
+    if ('speechSynthesis' in window) {
+      // Load voices
+      window.speechSynthesis.getVoices();
+      
+      // Some browsers need this event
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+  }, []);
+
+  // Auto-play voice after a delay
+  React.useEffect(() => {
+    if (!voicePlayed) {
+      const timer = setTimeout(() => {
+        playWelcomeVoice();
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [voicePlayed]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
