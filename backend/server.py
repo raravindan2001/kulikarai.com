@@ -29,7 +29,7 @@ db = client[os.environ['DB_NAME']]
 fs_bucket = AsyncIOMotorGridFSBucket(db)
 
 # JWT settings
-JWT_SECRET = os.environ.get('JWT_SECRET', 'kulikari_family_secret_2024')
+JWT_SECRET = os.environ.get('JWT_SECRET', 'kulikarai_family_secret_2024')
 JWT_ALGORITHM = 'HS256'
 JWT_EXPIRATION = timedelta(days=30)
 
@@ -281,7 +281,7 @@ async def add_parent(parent_data: dict, user_id: str = Depends(get_current_user)
         parent_id = str(uuid.uuid4())
         parent_doc = {
             "id": parent_id,
-            "email": f"{parent_name.lower().replace(' ', '')}@kulikari.family",
+            "email": f"{parent_name.lower().replace(' ', '')}@kulikarai.family",
             "password": hash_password("changeme123"),
             "name": parent_name,
             "bio": "",
@@ -313,7 +313,7 @@ async def add_family_member(member_data: dict, user_id: str = Depends(get_curren
     member_id = str(uuid.uuid4())
     member_doc = {
         "id": member_id,
-        "email": f"{name.lower().replace(' ', '')}@kulikari.family",
+        "email": f"{name.lower().replace(' ', '')}@kulikarai.family",
         "password": hash_password("changeme123"),
         "name": name,
         "bio": "",
@@ -347,7 +347,7 @@ async def add_family_member(member_data: dict, user_id: str = Depends(get_curren
                 parent_id = str(uuid.uuid4())
                 parent_doc = {
                     "id": parent_id,
-                    "email": f"{parent_name.lower().replace(' ', '')}@kulikari.family",
+                    "email": f"{parent_name.lower().replace(' ', '')}@kulikarai.family",
                     "password": hash_password("changeme123"),
                     "name": parent_name,
                     "bio": "",
