@@ -62,15 +62,15 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-warmPaper flex items-center justify-center">
-        <div className="text-2xl font-nunito text-coral">Loading...</div>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-2xl font-nunito text-blue-400">Loading...</div>
       </div>
     );
   }
 
   return (
     <AuthContext.Provider value={{ user, setUser, login, logout, API }}>
-      <div className="App min-h-screen bg-warmPaper noise-bg">
+      <div className="App min-h-screen bg-gray-900 noise-bg">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={!user ? <Landing /> : <Navigate to="/home" />} />
