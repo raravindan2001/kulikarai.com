@@ -75,9 +75,17 @@ const Home = () => {
           className="bg-white rounded-3xl p-6 shadow-lg mb-8"
         >
           <div className="flex items-start space-x-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-coral to-sunshine flex items-center justify-center text-white font-bold">
-              {user?.name?.charAt(0)}
-            </div>
+            {user?.avatar ? (
+              <img
+                src={user.avatar}
+                alt={user.name}
+                className="w-12 h-12 rounded-full object-cover border-2 border-amber-500"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-600 to-orange-600 flex items-center justify-center text-white font-bold">
+                {user?.name?.charAt(0)}
+              </div>
+            )}
             <div className="flex-1">
               <textarea
                 data-testid="create-post-textarea"
