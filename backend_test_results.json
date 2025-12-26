@@ -1,0 +1,93 @@
+{
+  "timestamp": "2025-12-26T18:42:35.553235",
+  "total_tests": 17,
+  "passed_tests": 14,
+  "success_rate": 0.8235294117647058,
+  "results": [
+    {
+      "test": "User Registration",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "User Login",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Current User",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Profile",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Post",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Posts Feed",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Like Post",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Upload Photo",
+      "success": false,
+      "details": "Status: 422, Expected: 200, Error: [{'type': 'missing', 'loc': ['query', 'image'], 'msg': 'Field required', 'input': None, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}]"
+    },
+    {
+      "test": "Get Photos",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Event",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Events",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Attend Event",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Users List",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Family Tree",
+      "success": false,
+      "details": "Status: 404, Expected: 200, Error: User not found"
+    },
+    {
+      "test": "Get Users for Messaging",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Send Message",
+      "success": false,
+      "details": "No other users to message"
+    },
+    {
+      "test": "Get Conversations",
+      "success": true,
+      "details": "Status: 200"
+    }
+  ]
+}
