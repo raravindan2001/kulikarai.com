@@ -80,7 +80,7 @@ const Landing = () => {
           </div>
           <div className="relative">
             <img 
-              src="https://images.pexels.com/photos/5638677/pexels-photo-5638677.jpeg?auto=compress&cs=tinysrgb&w=800" 
+              src="https://customer-assets.emergentagent.com/job_family-moments-11/artifacts/7tm1glyf_OIP.jfif" 
               alt="Happy family" 
               className="rounded-3xl shadow-2xl w-full h-[500px] object-cover"
             />
