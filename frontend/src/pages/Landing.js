@@ -100,7 +100,7 @@ const Landing = () => {
           transition={{ delay: 0.4 }}
           className="mt-32 mb-20"
         >
-          <h3 className="text-4xl font-fraunces font-bold text-center text-textPrimary mb-16">
+          <h3 className="text-4xl font-fraunces font-bold text-center text-white mb-16">
             Everything your family needs
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -115,11 +115,11 @@ const Landing = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + idx * 0.1 }}
-                className="bg-white rounded-3xl p-8 shadow-lg hover-lift"
+                className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-lg hover-lift border border-white/20"
               >
-                <feature.icon className="w-12 h-12 text-coral mb-4" />
-                <h4 className="text-xl font-fraunces font-semibold text-textPrimary mb-2">{feature.title}</h4>
-                <p className="text-textSecondary font-nunito">{feature.desc}</p>
+                <feature.icon className="w-12 h-12 text-yellow-400 mb-4" />
+                <h4 className="text-xl font-fraunces font-semibold text-white mb-2">{feature.title}</h4>
+                <p className="text-blue-100 font-nunito">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
