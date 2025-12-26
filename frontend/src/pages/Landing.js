@@ -40,6 +40,13 @@ const Landing = () => {
     }
   };
 
+  // Set volume when component mounts
+  React.useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.4; // Set to 40% for soothing background music
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 relative overflow-hidden">
       {/* Background music - Soothing South Indian Instrumental Fusion */}
