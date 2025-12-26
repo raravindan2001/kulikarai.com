@@ -14,7 +14,8 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #FFFCF5;
+  background-color: #0F172A;
+  color: #F3F4F6;
 }
 
 code {
