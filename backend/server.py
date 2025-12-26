@@ -289,8 +289,113 @@ async def get_user(user_id: str, current_user: str = Depends(get_current_user)):
     return user
 
 # Photo endpoints
+@api_router.post("/photos/upload")
+async def upload_photo(
+    file: UploadFile = File(...),
+    caption: str = Form(""),
+    album_id: str = Form(""),
+    user_id: str = Depends(get_current_user)
+):
+    """Upload photo to MongoDB GridFS and store metadata."""
+    try:
+        # Read file content
+        file_content = await file.read()
+        
+        # Validate file size (10MB max)
+        if len(file_content) > 10 * 1024 * 1024:
+            raise HTTPException(status_code=413, detail="File size exceeds 10MB limit")
+        
+        # Validate file type
+        if not file.content_type or not file.content_type.startswith('image/'):
+            raise HTTPException(status_code=400, detail="Only image files are allowed")
+        
+        # Resize image for optimization
+        try:
+            image = Image.open(io.BytesIO(file_content))
+            
+            # Convert RGBA to RGB if needed
+            if image.mode == 'RGBA':
+                image = image.convert('RGB')
+            
+            # Resize if too large (max 1920x1920)
+            max_size = (1920, 1920)
+            image.thumbnail(max_size, Image.Resampling.LANCZOS)
+            
+            # Save optimized image
+            img_byte_arr = io.BytesIO()
+            image.save(img_byte_arr, format='JPEG', quality=85, optimize=True)
+            file_content = img_byte_arr.getvalue()
+        except Exception as e:
+            # If image processing fails, use original
+            pass
+        
+        # Upload to GridFS
+        file_id = await fs_bucket.upload_from_stream(
+            file.filename or f"photo_{uuid.uuid4()}.jpg",
+            file_content,
+            metadata={
+                "content_type": file.content_type,
+                "user_id": user_id,
+                "uploaded_at": datetime.now(timezone.utc).isoformat()
+            }
+        )
+        
+        # Create photo document
+        photo_id = str(uuid.uuid4())
+        photo_doc = {
+            "id": photo_id,
+            "user_id": user_id,
+            "file_id": str(file_id),
+            "filename": file.filename,
+            "caption": caption or "",
+            "album_id": album_id or "",
+            "tags": [],
+            "likes": [],
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.photos.insert_one(photo_doc)
+        
+        return {
+            "id": photo_id,
+            "file_id": str(file_id),
+            "message": "Photo uploaded successfully",
+            "url": f"/api/photos/file/{file_id}"
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+
+@api_router.get("/photos/file/{file_id}")
+async def get_photo_file(file_id: str):
+    """Retrieve photo file from GridFS."""
+    try:
+        from bson import ObjectId
+        
+        # Get file from GridFS
+        grid_out = await fs_bucket.open_download_stream(ObjectId(file_id))
+        
+        # Read file content
+        contents = await grid_out.read()
+        
+        # Get content type from metadata
+        content_type = grid_out.metadata.get("content_type", "image/jpeg") if grid_out.metadata else "image/jpeg"
+        
+        return StreamingResponse(
+            io.BytesIO(contents),
+            media_type=content_type,
+            headers={
+                "Content-Disposition": f"inline; filename={grid_out.filename}"
+            }
+        )
+    
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="File not found")
+
 @api_router.post("/photos")
-async def upload_photo(photo_data: dict, user_id: str = Depends(get_current_user)):
+async def upload_photo_legacy(photo_data: dict, user_id: str = Depends(get_current_user)):
+    """Legacy endpoint for backward compatibility with base64 uploads."""
     photo_id = str(uuid.uuid4())
     photo_doc = {
         "id": photo_id,
