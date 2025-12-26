@@ -251,7 +251,7 @@ const Landing = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-stone-900 border-2 border-amber-700/50 rounded-3xl p-8 max-w-md w-full shadow-2xl"
+            className="bg-gray-900 border-2 border-amber-600/50 rounded-3xl p-8 max-w-md w-full shadow-2xl"
           >
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-serif font-bold text-amber-50">
