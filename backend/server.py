@@ -325,7 +325,7 @@ async def upload_photo(
             img_byte_arr = BytesIO()
             image.save(img_byte_arr, format='JPEG', quality=85, optimize=True)
             file_content = img_byte_arr.getvalue()
-        except Exception as e:
+        except Exception:
             # If image processing fails, use original
             pass
         
@@ -390,7 +390,7 @@ async def get_photo_file(file_id: str):
             }
         )
     
-    except Exception as e:
+    except Exception:
         raise HTTPException(status_code=404, detail="File not found")
 
 @api_router.post("/photos")
