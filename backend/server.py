@@ -414,6 +414,12 @@ async def upload_photo_legacy(photo_data: dict, user_id: str = Depends(get_curre
 async def get_photos(album_id: Optional[str] = None, user_id: str = Depends(get_current_user)):
     query = {"album_id": album_id} if album_id else {}
     photos = await db.photos.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
+    
+    # Update URLs for GridFS-stored photos
+    for photo in photos:
+        if photo.get("file_id"):
+            photo["url"] = f"/api/photos/file/{photo['file_id']}"
+    
     return photos
 
 @api_router.get("/photos/{photo_id}", response_model=Photo)
