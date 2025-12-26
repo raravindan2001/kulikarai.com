@@ -322,7 +322,7 @@ async def upload_photo(
             image.thumbnail(max_size, Image.Resampling.LANCZOS)
             
             # Save optimized image
-            img_byte_arr = io.BytesIO()
+            img_byte_arr = BytesIO()
             image.save(img_byte_arr, format='JPEG', quality=85, optimize=True)
             file_content = img_byte_arr.getvalue()
         except Exception as e:
