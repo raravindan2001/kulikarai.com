@@ -311,7 +311,7 @@ async def upload_photo(
         
         # Resize image for optimization
         try:
-            image = Image.open(io.BytesIO(file_content))
+            image = Image.open(BytesIO(file_content))
             
             # Convert RGBA to RGB if needed
             if image.mode == 'RGBA':
