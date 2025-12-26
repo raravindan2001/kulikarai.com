@@ -679,7 +679,7 @@ async def websocket_chat(websocket: WebSocket, user_id: str):
     await manager.connect(user_id, websocket)
     try:
         while True:
-            data = await websocket.receive_json()
+            await websocket.receive_json()
             # Handle incoming messages if needed
     except WebSocketDisconnect:
         manager.disconnect(user_id)
