@@ -30,22 +30,36 @@ const Photos = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('File size must be less than 10MB');
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Only image files are allowed');
+      return;
+    }
+
     setUploading(true);
     try {
-      // Convert to base64
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = async () => {
-        await axios.post(`${API}/photos`, {
-          image: reader.result,
-          caption: '',
-        });
-        toast.success('Photo uploaded!');
-        fetchPhotos();
-        setUploading(false);
-      };
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('caption', '');
+      formData.append('album_id', '');
+
+      const response = await axios.post(`${API}/photos/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      toast.success('Photo uploaded!');
+      fetchPhotos();
     } catch (error) {
-      toast.error('Failed to upload photo');
+      toast.error(error.response?.data?.detail || 'Failed to upload photo');
+    } finally {
       setUploading(false);
     }
   };
