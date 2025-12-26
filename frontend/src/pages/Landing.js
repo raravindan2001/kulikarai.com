@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { AuthContext } from '../App';
 import axios from 'axios';
 import { toast } from 'sonner';
-import { Heart, Users, Camera, MessageCircle } from 'lucide-react';
+import { Heart, Users, Camera, MessageCircle, Volume2, VolumeX } from 'lucide-react';
 
 const Landing = () => {
   const { login, API } = useContext(AuthContext);
@@ -11,6 +11,8 @@ const Landing = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ email: '', password: '', name: '' });
   const [loading, setLoading] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const audioRef = React.useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
