@@ -79,15 +79,16 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 relative overflow-hidden" onClick={handlePageClick}>
-      {/* Background music - Soothing South Indian Instrumental Fusion */}
+      {/* Background music - Soothing Violin Melody */}
       <audio 
         ref={audioRef}
         loop 
         className="hidden"
         preload="auto"
       >
-        <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_4a3c2c0e7f.mp3" type="audio/mpeg" />
-        <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg" />
+        <source src="https://cdn.pixabay.com/audio/2022/10/26/audio_24593e2af8.mp3" type="audio/mpeg" />
+        <source src="https://assets.mixkit.co/active_storage/sfx/2490/2490-preview.mp3" type="audio/mpeg" />
+        <source src="https://cdn.pixabay.com/audio/2023/02/28/audio_01b702e6b7.mp3" type="audio/mpeg" />
       </audio>
       
       {/* Music Control Button */}
