@@ -60,10 +60,18 @@ const Layout = ({ children }) => {
               onClick={() => navigate('/profile')}
               className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
             >
-              <span className="hidden sm:block font-nunito font-semibold text-textPrimary">{user?.name}</span>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-coral to-sunshine flex items-center justify-center text-white font-bold">
-                {user?.name?.charAt(0)}
-              </div>
+              <span className="hidden sm:block font-nunito font-semibold text-amber-100">{user?.name}</span>
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="w-10 h-10 rounded-full object-cover border-2 border-amber-500"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-600 to-orange-600 flex items-center justify-center text-white font-bold border-2 border-amber-500">
+                  {user?.name?.charAt(0)}
+                </div>
+              )}
             </button>
           </div>
         </div>
