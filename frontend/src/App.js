@@ -62,7 +62,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-stone-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-2xl font-semibold text-amber-400">Loading...</div>
       </div>
     );
@@ -70,7 +70,7 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ user, setUser, login, logout, API }}>
-      <div className="App min-h-screen bg-stone-900 noise-bg">
+      <div className="App min-h-screen bg-black noise-bg">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={!user ? <Landing /> : <Navigate to="/home" />} />
