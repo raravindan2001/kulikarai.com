@@ -55,19 +55,27 @@ const Landing = () => {
     if (audioRef.current) {
       if (isMusicPlaying) {
         audioRef.current.pause();
+        setIsMusicPlaying(false);
       } else {
-        audioRef.current.play();
+        audioRef.current.play().then(() => {
+          setIsMusicPlaying(true);
+          setMusicInitialized(true);
+        }).catch(err => {
+          console.log('Play failed:', err);
+        });
       }
-      setIsMusicPlaying(!isMusicPlaying);
     }
   };
 
-  // Set volume when component mounts
-  React.useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.4; // Set to 40% for soothing background music
+  // Handle page click to start music if not playing
+  const handlePageClick = () => {
+    if (!musicInitialized && audioRef.current) {
+      audioRef.current.play().then(() => {
+        setIsMusicPlaying(true);
+        setMusicInitialized(true);
+      }).catch(() => {});
     }
-  }, []);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 relative overflow-hidden">
