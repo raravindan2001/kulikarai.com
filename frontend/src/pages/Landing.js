@@ -42,10 +42,24 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 relative overflow-hidden">
-      {/* Background music */}
-      <audio autoPlay loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+      {/* Background music - South Indian Divine Music */}
+      <audio 
+        ref={audioRef}
+        autoPlay 
+        loop 
+        className="hidden"
+      >
+        <source src="https://www.bensound.com/bensound-music/bensound-creativeminds.mp3" type="audio/mpeg" />
       </audio>
+      
+      {/* Music Control Button */}
+      <button
+        onClick={toggleMusic}
+        className="fixed top-24 right-8 z-50 bg-yellow-500 text-blue-900 p-3 rounded-full shadow-lg hover:bg-yellow-400 transition-all"
+        title={isMusicPlaying ? "Pause Music" : "Play Music"}
+      >
+        {isMusicPlaying ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+      </button>
       
       {/* Background decorations */}
       <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400/10 rounded-full blur-3xl"></div>
