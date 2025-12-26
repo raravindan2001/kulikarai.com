@@ -286,14 +286,14 @@ async def search_users(query: str = Query(""), current_user: str = Depends(get_c
 
 # Photo endpoints
 @api_router.post("/photos")
-async def upload_photo(image: str, caption: Optional[str] = None, album_id: Optional[str] = None, user_id: str = Depends(get_current_user)):
+async def upload_photo(photo_data: dict, user_id: str = Depends(get_current_user)):
     photo_id = str(uuid.uuid4())
     photo_doc = {
         "id": photo_id,
         "user_id": user_id,
-        "url": image,
-        "caption": caption or "",
-        "album_id": album_id or "",
+        "url": photo_data.get("image", ""),
+        "caption": photo_data.get("caption", ""),
+        "album_id": photo_data.get("album_id", ""),
         "tags": [],
         "likes": [],
         "created_at": datetime.now(timezone.utc).isoformat()
