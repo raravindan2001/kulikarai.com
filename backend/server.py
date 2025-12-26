@@ -262,8 +262,44 @@ async def update_user(update: UserUpdate, user_id: str = Depends(get_current_use
 @api_router.post("/users/relationships")
 async def add_relationship(rel: RelationshipAdd, user_id: str = Depends(get_current_user)):
     relationship = {"user_id": rel.user_id, "relation_type": rel.relation_type}
-    await db.users.update_one({"id": user_id}, {"$push": {"relationships": relationship}})
+    await db.users.update_one({" id": user_id}, {"$push": {"relationships": relationship}})
     return {"message": "Relationship added"}
+
+@api_router.post("/users/add-parent")
+async def add_parent(parent_data: dict, user_id: str = Depends(get_current_user)):
+    """Add a parent to the family tree and create relationship"""
+    parent_name = parent_data.get("parentName")
+    relation = parent_data.get("relation", "parent")
+    
+    # Check if parent already exists
+    existing = await db.users.find_one({"name": parent_name}, {"_id": 0})
+    
+    if existing:
+        parent_id = existing['id']
+    else:
+        # Create new user for parent
+        parent_id = str(uuid.uuid4())
+        parent_doc = {
+            "id": parent_id,
+            "email": f"{parent_name.lower().replace(' ', '')}@kulikari.family",
+            "password": hash_password("changeme123"),
+            "name": parent_name,
+            "bio": "",
+            "avatar": "",
+            "birthday": "",
+            "relationships": [{
+                "user_id": user_id,
+                "relation_type": "child"
+            }],
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.users.insert_one(parent_doc)
+    
+    # Add relationship to current user
+    relationship = {"user_id": parent_id, "relation_type": relation}
+    await db.users.update_one({"id": user_id}, {"$push": {"relationships": relationship}})
+    
+    return {"message": "Parent added", "parent_id": parent_id}
 
 @api_router.get("/users/family-tree")
 async def get_family_tree(user_id: str = Depends(get_current_user)):
