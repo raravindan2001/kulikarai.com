@@ -1,0 +1,178 @@
+{
+  "identity": {
+    "name": "Kulikari",
+    "persona": "E1 - The Anti-AI Designer",
+    "tone": "Warm, Nostalgic, Playful, Safe, Connected",
+    "design_philosophy": "Digital Scrapbook meets Modern Chat. Tactile textures, soft rounded shapes, and vibrant but cozy colors."
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Fraunces, serif",
+      "weights": ["300", "600", "800"],
+      "usage": "Use for all major section headers, hero text, and emotional statements. It brings a 'Storybook' feel.",
+      "letter_spacing": "tracking-tight"
+    },
+    "body": {
+      "font_family": "Nunito, sans-serif",
+      "weights": ["400", "600", "700"],
+      "usage": "Use for all UI text, buttons, inputs, and long-form reading. It is rounded and friendly.",
+      "letter_spacing": "tracking-normal"
+    },
+    "google_fonts_import": "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;600;800&family=Nunito:wght@400;600;700&display=swap"
+  },
+  "colors": {
+    "palette_name": "Sunday Morning Picnic",
+    "primary": {
+      "name": "Coral Love",
+      "hex": "#FF6B6B",
+      "tailwind_class": "bg-[#FF6B6B]",
+      "usage": "Primary CTAs, Heart icons, Important notifications"
+    },
+    "secondary": {
+      "name": "Sage Growth",
+      "hex": "#87C38F",
+      "tailwind_class": "bg-[#87C38F]",
+      "usage": "Success states, Family Tree connections, Secondary buttons"
+    },
+    "accent": {
+      "name": "Sunshine",
+      "hex": "#F9C74F",
+      "tailwind_class": "bg-[#F9C74F]",
+      "usage": "Highlights, Badges, 'New' tags"
+    },
+    "background": {
+      "name": "Warm Paper",
+      "hex": "#FFFCF5",
+      "tailwind_class": "bg-[#FFFCF5]",
+      "usage": "Main app background. NEVER pure white."
+    },
+    "surface": {
+      "name": "Pure White",
+      "hex": "#FFFFFF",
+      "tailwind_class": "bg-white",
+      "usage": "Cards, Modals, Input fields"
+    },
+    "text": {
+      "primary": "#2D3436",
+      "secondary": "#636E72",
+      "muted": "#B2BEC3"
+    },
+    "gradients": {
+      "warm_glow": "bg-gradient-to-br from-[#FF6B6B] to-[#F9C74F]",
+      "soft_sky": "bg-gradient-to-b from-[#E0F7FA] to-[#FFFCF5]"
+    }
+  },
+  "visual_enhancers": {
+    "border_radius": {
+      "default": "rounded-2xl",
+      "card": "rounded-3xl",
+      "button": "rounded-full",
+      "input": "rounded-xl"
+    },
+    "shadows": {
+      "soft": "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+      "hover": "shadow-[0_8px_30px_rgb(0,0,0,0.12)]",
+      "inner": "shadow-inner"
+    },
+    "textures": {
+      "noise": "Use a subtle SVG noise overlay on the main background to give it a paper texture feel.",
+      "doodles": "Use hand-drawn SVG doodles (stars, hearts, squiggles) as background decorations."
+    }
+  },
+  "layout_strategies": {
+    "grid_system": "Bento Grid",
+    "photo_feed": {
+      "type": "Masonry",
+      "columns": "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+      "gap": "gap-6",
+      "rule": "Images should have rounded-2xl corners. Mix portrait and landscape orientations."
+    },
+    "dashboard": {
+      "type": "Control Room (Soft)",
+      "structure": "Sidebar (Left) + Main Content (Center) + Activity Feed (Right - Optional)",
+      "spacing": "p-6 md:p-10"
+    }
+  },
+  "components": {
+    "buttons": {
+      "style": "Pill-shaped, bold text.",
+      "hover": "Scale up slightly (scale-105) and brighten.",
+      "variants": {
+        "primary": "bg-[#FF6B6B] text-white hover:bg-[#FF8787]",
+        "secondary": "bg-[#FFFCF5] border-2 border-[#FF6B6B] text-[#FF6B6B] hover:bg-[#FFF0F0]",
+        "ghost": "hover:bg-[#F0F0F0] text-[#2D3436]"
+      }
+    },
+    "cards": {
+      "style": "White background, rounded-3xl, soft shadow. Padding p-6 or p-8.",
+      "interaction": "Hover: -translate-y-1 transition-transform duration-300"
+    },
+    "inputs": {
+      "style": "bg-[#F0F2F5] border-transparent focus:border-[#FF6B6B] focus:bg-white rounded-xl h-12 px-4",
+      "label": "font-bold text-sm text-[#636E72] mb-2 block"
+    }
+  },
+  "motion": {
+    "library": "framer-motion",
+    "transitions": {
+      "page_load": "initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}",
+      "hover_lift": "whileHover={{ y: -4 }}",
+      "button_tap": "whileTap={{ scale: 0.95 }}"
+    },
+    "micro_interactions": "Heart icons should 'pop' when clicked. Messages should slide in from the bottom."
+  },
+  "images": {
+    "hero_family": {
+      "url": "https://images.pexels.com/photos/5638677/pexels-photo-5638677.jpeg",
+      "alt": "Happy diverse family having a picnic",
+      "usage": "Landing page hero section"
+    },
+    "dinner_gathering": {
+      "url": "https://images.pexels.com/photos/6232558/pexels-photo-6232558.jpeg",
+      "alt": "Family dinner with warm lighting",
+      "usage": "Events or Gatherings section"
+    },
+    "grandparents_moment": {
+      "url": "https://images.pexels.com/photos/5960151/pexels-photo-5960151.jpeg",
+      "alt": "Grandparents playing with grandchildren",
+      "usage": "About or Family Tree section"
+    },
+    "placeholders": {
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
+      "cover": "https://images.unsplash.com/photo-1606659894125-40824878b6ce?auto=format&fit=crop&w=800&q=80"
+    }
+  },
+  "creative_features": {
+    "family_tree": {
+      "library": "react-flow-renderer (customized)",
+      "style": "Nodes should look like leaves or fruits. Edges should be curved brown lines. Background should be a subtle parchment texture.",
+      "interaction": "Zoom and Pan enabled. Click node to see profile."
+    },
+    "chat": {
+      "style": "Bubbles. User: Coral background, White text. Others: Gray background, Dark text.",
+      "features": "Reaction emojis floating up."
+    }
+  },
+  "accessibility": {
+    "contrast": "Ensure text on Coral background is White. Text on Cream background must be Dark Slate.",
+    "focus_states": "Ring color should be #FF6B6B (Coral).",
+    "reduced_motion": "Respect prefers-reduced-motion media query."
+  },
+  "instructions_to_main_agent": [
+    "1. INSTALLATION: Install 'framer-motion', 'lucide-react', 'clsx', 'tailwind-merge', 'react-router-dom'.",
+    "2. CONFIG: Update tailwind.config.js with the 'Sunday Morning Picnic' color palette and fonts.",
+    "3. FONTS: Add the Google Fonts link to index.html immediately.",
+    "4. COMPONENTS: Use Shadcn UI logic but completely override the styles to match the 'Soft Clay' aesthetic. No sharp corners!",
+    "5. LAYOUT: Build the 'Bento Grid' for the photo gallery using CSS Grid.",
+    "6. FAMILY TREE: Implement a basic visualization using a library or custom SVG if libraries are too heavy.",
+    "7. DATA-TESTID: Add data-testid to all interactive elements (buttons, inputs, links)."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Avoid generic 'AI slop' designs. No default blue/gray SaaS look.",
+    "Use 2-3x more spacing than typical. 'p-8' is the new 'p-4'.",
+    "Every interaction needs a micro-animation.",
+    "Do not use 'Inter' font. Use 'Nunito' and 'Fraunces'.",
+    "Use 'sonner' for toasts.",
+    "Create depth through layered design elements with z-index hierarchy."
+  ]
+}
