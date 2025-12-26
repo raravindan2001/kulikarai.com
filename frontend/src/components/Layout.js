@@ -32,7 +32,7 @@ const Layout = ({ children }) => {
               className="flex items-center space-x-2"
             >
               <Heart className="w-7 h-7 text-coral" fill="#FF6B6B" />
-              <span className="text-2xl font-fraunces font-bold text-textPrimary">Kulikari</span>
+              <span className="text-2xl font-fraunces font-bold text-textPrimary">Kulikarai</span>
             </button>
 
             {/* Desktop Navigation */}

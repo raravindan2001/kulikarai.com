@@ -18,7 +18,7 @@ const Settings = () => {
     { icon: User, title: 'Profile Settings', desc: 'Manage your account details', link: '/profile' },
     { icon: Bell, title: 'Notifications', desc: 'Configure notification preferences', link: '#' },
     { icon: Shield, title: 'Privacy & Security', desc: 'Control your privacy settings', link: '#' },
-    { icon: HelpCircle, title: 'Help & Support', desc: 'Get help with Kulikari', link: '#' },
+    { icon: HelpCircle, title: 'Help & Support', desc: 'Get help with Kulikarai', link: '#' },
   ];
 
   return (

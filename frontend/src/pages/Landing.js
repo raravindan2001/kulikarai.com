@@ -20,7 +20,7 @@ const Landing = () => {
       // Cancel any ongoing speech
       window.speechSynthesis.cancel();
       
-      const utterance = new SpeechSynthesisUtterance('Welcome to Kulikari Family');
+      const utterance = new SpeechSynthesisUtterance('Welcome to Kulikarai Family');
       
       // Configure voice settings
       utterance.rate = 0.9; // Slightly slower for clarity
@@ -149,7 +149,7 @@ const Landing = () => {
           animate={{ opacity: 1, y: 0 }}
           className="fixed top-40 right-8 z-40 bg-blue-950/80 backdrop-blur-sm text-yellow-400 px-4 py-2 rounded-full shadow-lg text-xs font-nunito"
         >
-          🎙️ Welcome to Kulikari Family
+          🎙️ Welcome to Kulikarai Family
         </motion.div>
       )}
       
@@ -167,7 +167,7 @@ const Landing = () => {
         >
           <div className="flex items-center space-x-2">
             <Heart className="w-8 h-8 text-amber-400" fill="#FCD34D" />
-            <h1 className="text-3xl font-serif font-bold text-amber-50">Kulikari</h1>
+            <h1 className="text-3xl font-serif font-bold text-amber-50">Kulikarai</h1>
           </div>
           <button
             data-testid="auth-toggle-btn"
@@ -191,7 +191,7 @@ const Landing = () => {
             </h2>
             <p className="text-xl text-amber-100 leading-relaxed mb-10">
               Share photos, chat with loved ones, and keep everyone connected. 
-              Kulikari brings your family closer, no matter the distance.
+              Kulikarai brings your family closer, no matter the distance.
             </p>
             <div className="flex flex-wrap gap-4">
               <button
@@ -255,7 +255,7 @@ const Landing = () => {
           >
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-serif font-bold text-amber-50">
-                {isLogin ? 'Welcome Back' : 'Join Kulikari'}
+                {isLogin ? 'Welcome Back' : 'Join Kulikarai'}
               </h3>
               <button
                 data-testid="close-auth-modal-btn"
