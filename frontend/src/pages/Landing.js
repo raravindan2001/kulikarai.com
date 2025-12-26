@@ -124,7 +124,7 @@ const Landing = () => {
         >
           <div className="flex items-center space-x-2">
             <Volume2 className="w-4 h-4 animate-pulse" />
-            <span>Click to enable divine music 🎵</span>
+            <span>Click to enable violin melody 🎻</span>
           </div>
         </motion.div>
       )}
