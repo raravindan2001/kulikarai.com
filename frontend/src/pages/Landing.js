@@ -101,7 +101,7 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 relative overflow-hidden" onClick={handlePageClick}>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden" onClick={handlePageClick}>
       {/* Voice Control Button */}
       <button
         onClick={(e) => {
