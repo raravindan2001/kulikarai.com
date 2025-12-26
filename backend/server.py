@@ -301,6 +301,93 @@ async def add_parent(parent_data: dict, user_id: str = Depends(get_current_user)
     
     return {"message": "Parent added", "parent_id": parent_id}
 
+@api_router.post("/users/add-family-member")
+async def add_family_member(member_data: dict, user_id: str = Depends(get_current_user)):
+    """Add a family member with optional parent information"""
+    name = member_data.get("name")
+    relation = member_data.get("relation")
+    father_name = member_data.get("fatherName")
+    mother_name = member_data.get("motherName")
+    
+    # Create new family member
+    member_id = str(uuid.uuid4())
+    member_doc = {
+        "id": member_id,
+        "email": f"{name.lower().replace(' ', '')}@kulikari.family",
+        "password": hash_password("changeme123"),
+        "name": name,
+        "bio": "",
+        "avatar": "",
+        "birthday": "",
+        "relationships": [],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Add relationship to current user
+    if relation:
+        member_doc["relationships"].append({
+            "user_id": user_id,
+            "relation_type": "sibling" if relation in ["sibling"] else "child"
+        })
+        await db.users.update_one(
+            {"id": user_id},
+            {"$push": {"relationships": {"user_id": member_id, "relation_type": relation}}}
+        )
+    
+    await db.users.insert_one(member_doc)
+    
+    # Add parents if provided
+    parent_ids = []
+    for parent_name, parent_relation in [(father_name, "father"), (mother_name, "mother")]:
+        if parent_name:
+            existing_parent = await db.users.find_one({"name": parent_name}, {"_id": 0})
+            if existing_parent:
+                parent_id = existing_parent['id']
+            else:
+                parent_id = str(uuid.uuid4())
+                parent_doc = {
+                    "id": parent_id,
+                    "email": f"{parent_name.lower().replace(' ', '')}@kulikari.family",
+                    "password": hash_password("changeme123"),
+                    "name": parent_name,
+                    "bio": "",
+                    "avatar": "",
+                    "birthday": "",
+                    "relationships": [{
+                        "user_id": member_id,
+                        "relation_type": "child"
+                    }],
+                    "created_at": datetime.now(timezone.utc).isoformat()
+                }
+                await db.users.insert_one(parent_doc)
+            
+            # Add parent relationship to member
+            await db.users.update_one(
+                {"id": member_id},
+                {"$push": {"relationships": {"user_id": parent_id, "relation_type": parent_relation}}}
+            )
+            parent_ids.append(parent_id)
+    
+    return {"message": "Family member added", "member_id": member_id, "parent_ids": parent_ids}
+
+@api_router.delete("/users/relationships/{user_id}/{relation_user_id}")
+async def delete_relationship(user_id: str, relation_user_id: str, current_user: str = Depends(get_current_user)):
+    """Delete a relationship between two users"""
+    if user_id != current_user:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    await db.users.update_one(
+        {"id": user_id},
+        {"$pull": {"relationships": {"user_id": relation_user_id}}}
+    )
+    
+    await db.users.update_one(
+        {"id": relation_user_id},
+        {"$pull": {"relationships": {"user_id": user_id}}}
+    )
+    
+    return {"message": "Relationship deleted"}
+
 @api_router.get("/users/family-tree")
 async def get_family_tree(user_id: str = Depends(get_current_user)):
     users = await db.users.find({}, {"_id": 0, "password": 0, "email": 0}).to_list(1000)
