@@ -1,53 +1,92 @@
-import { useEffect } from "react";
-import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import axios from 'axios';
+import { Toaster } from '@/components/ui/sonner';
+import './App.css';
+
+// Pages
+import Landing from './pages/Landing';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
+import Photos from './pages/Photos';
+import PhotoDetail from './pages/PhotoDetail';
+import Messages from './pages/Messages';
+import Events from './pages/Events';
+import FamilyTree from './pages/FamilyTree';
+import Settings from './pages/Settings';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const Home = () => {
-  const helloWorldApi = async () => {
+// Auth Context
+export const AuthContext = React.createContext();
+
+function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
+  }, [token]);
+
+  const fetchUser = async () => {
     try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
+      const response = await axios.get(`${API}/auth/me`);
+      setUser(response.data);
+    } catch (error) {
+      console.error('Failed to fetch user:', error);
+      logout();
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+  const login = (newToken) => {
+    localStorage.setItem('token', newToken);
+    setToken(newToken);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+    setUser(null);
+    delete axios.defaults.headers.common['Authorization'];
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-warmPaper flex items-center justify-center">
+        <div className="text-2xl font-nunito text-coral">Loading...</div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
-
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <AuthContext.Provider value={{ user, setUser, login, logout, API }}>
+      <div className="App min-h-screen bg-warmPaper noise-bg">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={!user ? <Landing /> : <Navigate to="/home" />} />
+            <Route path="/home" element={user ? <Home /> : <Navigate to="/" />} />
+            <Route path="/profile/:userId?" element={user ? <Profile /> : <Navigate to="/" />} />
+            <Route path="/photos" element={user ? <Photos /> : <Navigate to="/" />} />
+            <Route path="/photos/:photoId" element={user ? <PhotoDetail /> : <Navigate to="/" />} />
+            <Route path="/messages/:conversationId?" element={user ? <Messages /> : <Navigate to="/" />} />
+            <Route path="/events" element={user ? <Events /> : <Navigate to="/" />} />
+            <Route path="/family-tree" element={user ? <FamilyTree /> : <Navigate to="/" />} />
+            <Route path="/settings" element={user ? <Settings /> : <Navigate to="/" />} />
+          </Routes>
+        </BrowserRouter>
+        <Toaster position="top-center" />
+      </div>
+    </AuthContext.Provider>
   );
 }
 
