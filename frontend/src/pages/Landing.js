@@ -102,64 +102,54 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 relative overflow-hidden" onClick={handlePageClick}>
-      {/* Background music - Soothing Violin Melody */}
-      <audio 
-        ref={audioRef}
-        loop 
-        className="hidden"
-        preload="auto"
-      >
-        <source src="https://cdn.pixabay.com/audio/2022/10/26/audio_24593e2af8.mp3" type="audio/mpeg" />
-        <source src="https://assets.mixkit.co/active_storage/sfx/2490/2490-preview.mp3" type="audio/mpeg" />
-        <source src="https://cdn.pixabay.com/audio/2023/02/28/audio_01b702e6b7.mp3" type="audio/mpeg" />
-      </audio>
-      
-      {/* Music Control Button */}
+      {/* Voice Control Button */}
       <button
         onClick={(e) => {
           e.stopPropagation();
-          toggleMusic();
+          playWelcomeVoice();
         }}
         className="fixed top-24 right-8 z-50 bg-yellow-500/90 backdrop-blur-sm text-blue-900 p-3 rounded-full shadow-xl hover:bg-yellow-400 transition-all hover:scale-110 group"
-        title={isMusicPlaying ? "Pause Music" : "Play Music"}
+        title="Play Welcome Message"
       >
-        {isMusicPlaying ? (
-          <div className="flex items-center space-x-2">
-            <Volume2 className="w-5 h-5" />
-            <span className="hidden group-hover:inline-block text-xs font-semibold pr-2">Pause</span>
-          </div>
-        ) : (
-          <div className="flex items-center space-x-2 animate-pulse">
-            <VolumeX className="w-5 h-5" />
-            <span className="hidden group-hover:inline-block text-xs font-semibold pr-2">Play</span>
-          </div>
-        )}
+        <div className="flex items-center space-x-2">
+          {isVoicePlaying ? (
+            <>
+              <Volume2 className="w-5 h-5 animate-pulse" />
+              <span className="hidden group-hover:inline-block text-xs font-semibold pr-2">Playing...</span>
+            </>
+          ) : (
+            <>
+              <Volume2 className="w-5 h-5" />
+              <span className="hidden group-hover:inline-block text-xs font-semibold pr-2">Replay</span>
+            </>
+          )}
+        </div>
       </button>
       
-      {/* Music Prompt - Shows if not playing */}
-      {!isMusicPlaying && !musicInitialized && (
+      {/* Voice Prompt - Shows if not played */}
+      {!voicePlayed && !isVoicePlaying && (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 2 }}
           className="fixed top-40 right-8 z-40 bg-yellow-500 text-blue-900 px-4 py-3 rounded-2xl shadow-xl text-sm font-nunito font-semibold cursor-pointer hover:bg-yellow-400 transition-all"
-          onClick={toggleMusic}
+          onClick={playWelcomeVoice}
         >
           <div className="flex items-center space-x-2">
             <Volume2 className="w-4 h-4 animate-pulse" />
-            <span>Click to enable violin melody 🎻</span>
+            <span>Click to hear welcome message 🎙️</span>
           </div>
         </motion.div>
       )}
       
-      {/* Music Info Badge */}
-      {isMusicPlaying && (
+      {/* Voice Status Badge */}
+      {isVoicePlaying && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="fixed top-40 right-8 z-40 bg-blue-950/80 backdrop-blur-sm text-yellow-400 px-4 py-2 rounded-full shadow-lg text-xs font-nunito"
         >
-          🎻 Soothing Violin Melody
+          🎙️ Welcome to Kulikari Family
         </motion.div>
       )}
       
