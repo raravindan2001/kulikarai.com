@@ -247,13 +247,6 @@ async def get_me(user_id: str = Depends(get_current_user)):
     return user
 
 # User endpoints
-@api_router.get("/users/{user_id}", response_model=UserProfile)
-async def get_user(user_id: str, current_user: str = Depends(get_current_user)):
-    user = await db.users.find_one({"id": user_id}, {"_id": 0, "password": 0})
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
-
 @api_router.put("/users/me", response_model=UserProfile)
 async def update_user(update: UserUpdate, user_id: str = Depends(get_current_user)):
     update_data = {k: v for k, v in update.model_dump().items() if v is not None}
@@ -283,6 +276,13 @@ async def search_users(query: str = Query(""), current_user: str = Depends(get_c
     else:
         users = await db.users.find({}, {"_id": 0, "password": 0, "email": 0}).to_list(50)
     return {"users": users}
+
+@api_router.get("/users/{user_id}", response_model=UserProfile)
+async def get_user(user_id: str, current_user: str = Depends(get_current_user)):
+    user = await db.users.find_one({"id": user_id}, {"_id": 0, "password": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 # Photo endpoints
 @api_router.post("/photos")
