@@ -93,29 +93,10 @@ const Landing = () => {
     }
   };
 
-  const toggleMusic = () => {
-    if (audioRef.current) {
-      if (isMusicPlaying) {
-        audioRef.current.pause();
-        setIsMusicPlaying(false);
-      } else {
-        audioRef.current.play().then(() => {
-          setIsMusicPlaying(true);
-          setMusicInitialized(true);
-        }).catch(err => {
-          console.log('Play failed:', err);
-        });
-      }
-    }
-  };
-
-  // Handle page click to start music if not playing
+  // Handle page click to play voice
   const handlePageClick = () => {
-    if (!musicInitialized && audioRef.current) {
-      audioRef.current.play().then(() => {
-        setIsMusicPlaying(true);
-        setMusicInitialized(true);
-      }).catch(() => {});
+    if (!voicePlayed && !isVoicePlaying) {
+      playWelcomeVoice();
     }
   };
 
