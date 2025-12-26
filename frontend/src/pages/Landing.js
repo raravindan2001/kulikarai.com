@@ -187,9 +187,9 @@ const Landing = () => {
         >
           <div>
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-fraunces font-bold text-white leading-tight mb-6">
-              Your family's <span className="text-yellow-400">divine home</span> on the web
+              Your family's <span className="text-blue-400">divine home</span> on the web
             </h2>
-            <p className="text-xl text-blue-100 font-nunito mb-10 leading-relaxed">
+            <p className="text-xl text-gray-300 font-nunito mb-10 leading-relaxed">
               Share photos, chat with loved ones, and keep everyone connected. 
               Kulikari brings your family closer, no matter the distance.
             </p>
@@ -197,7 +197,7 @@ const Landing = () => {
               <button
                 data-testid="get-started-hero-btn"
                 onClick={() => setShowAuth(true)}
-                className="bg-yellow-500 text-blue-900 px-10 py-4 rounded-full font-nunito font-semibold text-lg hover:bg-yellow-400 transition-all hover:scale-105 shadow-xl"
+                className="bg-blue-500 text-white px-10 py-4 rounded-full font-nunito font-semibold text-lg hover:bg-blue-600 transition-all hover:scale-105 shadow-xl"
               >
                 Create Family Network
               </button>
