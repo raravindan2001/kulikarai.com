@@ -51,15 +51,18 @@
 }
 
 .chat-bubble-sent {
-  background-color: #FF6B6B;
+  background: linear-gradient(135deg, #D97706 0%, #EA580C 100%);
   color: white;
   margin-left: auto;
   border-bottom-right-radius: 0.25rem;
+  font-weight: 500;
 }
 
 .chat-bubble-received {
-  background-color: #F0F2F5;
-  color: #2D3436;
+  background-color: #44403C;
+  color: #FEF3C7;
   margin-right: auto;
   border-bottom-left-radius: 0.25rem;
+  border: 1px solid #78716C;
+  font-weight: 500;
 }
