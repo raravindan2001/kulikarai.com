@@ -817,6 +817,100 @@ async def websocket_chat(websocket: WebSocket, user_id: str):
     except WebSocketDisconnect:
         manager.disconnect(user_id)
 
+# Cooking Tips endpoints
+@api_router.post("/cooking-tips")
+async def create_cooking_tip(tip_data: dict, user_id: str = Depends(get_current_user)):
+    tip_id = str(uuid.uuid4())
+    tip_doc = {
+        "id": tip_id,
+        "user_id": user_id,
+        "user_name": (await db.users.find_one({"id": user_id}, {"_id": 0}))['name'],
+        "title": tip_data.get("title"),
+        "category": tip_data.get("category", "general"),
+        "ingredients": tip_data.get("ingredients", ""),
+        "instructions": tip_data.get("instructions"),
+        "cooking_time": tip_data.get("cooking_time", ""),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.cooking_tips.insert_one(tip_doc)
+    return tip_doc
+
+@api_router.get("/cooking-tips")
+async def get_cooking_tips(user_id: str = Depends(get_current_user)):
+    tips = await db.cooking_tips.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return tips
+
+@api_router.delete("/cooking-tips/{tip_id}")
+async def delete_cooking_tip(tip_id: str, user_id: str = Depends(get_current_user)):
+    tip = await db.cooking_tips.find_one({"id": tip_id}, {"_id": 0})
+    if not tip or tip['user_id'] != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.cooking_tips.delete_one({"id": tip_id})
+    return {"message": "Tip deleted"}
+
+# Kolam Tips endpoints
+@api_router.post("/kolam-tips")
+async def create_kolam_tip(tip_data: dict, user_id: str = Depends(get_current_user)):
+    tip_id = str(uuid.uuid4())
+    tip_doc = {
+        "id": tip_id,
+        "user_id": user_id,
+        "user_name": (await db.users.find_one({"id": user_id}, {"_id": 0}))['name'],
+        "title": tip_data.get("title"),
+        "difficulty": tip_data.get("difficulty", "easy"),
+        "description": tip_data.get("description"),
+        "dots_pattern": tip_data.get("dots_pattern", ""),
+        "image_url": tip_data.get("image_url", ""),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.kolam_tips.insert_one(tip_doc)
+    return tip_doc
+
+@api_router.get("/kolam-tips")
+async def get_kolam_tips(user_id: str = Depends(get_current_user)):
+    tips = await db.kolam_tips.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return tips
+
+@api_router.delete("/kolam-tips/{tip_id}")
+async def delete_kolam_tip(tip_id: str, user_id: str = Depends(get_current_user)):
+    tip = await db.kolam_tips.find_one({"id": tip_id}, {"_id": 0})
+    if not tip or tip['user_id'] != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.kolam_tips.delete_one({"id": tip_id})
+    return {"message": "Tip deleted"}
+
+# Perumal Utsavam endpoints
+@api_router.post("/perumal-utsavam")
+async def create_utsavam(utsavam_data: dict, user_id: str = Depends(get_current_user)):
+    utsavam_id = str(uuid.uuid4())
+    utsavam_doc = {
+        "id": utsavam_id,
+        "user_id": user_id,
+        "user_name": (await db.users.find_one({"id": user_id}, {"_id": 0}))['name'],
+        "name": utsavam_data.get("name"),
+        "date": utsavam_data.get("date"),
+        "place": utsavam_data.get("place"),
+        "time": utsavam_data.get("time", ""),
+        "links": utsavam_data.get("links", []),
+        "description": utsavam_data.get("description", ""),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.perumal_utsavam.insert_one(utsavam_doc)
+    return utsavam_doc
+
+@api_router.get("/perumal-utsavam")
+async def get_utsavam_list(user_id: str = Depends(get_current_user)):
+    utsavams = await db.perumal_utsavam.find({}, {"_id": 0}).sort("date", 1).to_list(100)
+    return utsavams
+
+@api_router.delete("/perumal-utsavam/{utsavam_id}")
+async def delete_utsavam(utsavam_id: str, user_id: str = Depends(get_current_user)):
+    utsavam = await db.perumal_utsavam.find_one({"id": utsavam_id}, {"_id": 0})
+    if not utsavam or utsavam['user_id'] != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.perumal_utsavam.delete_one({"id": utsavam_id})
+    return {"message": "Utsavam deleted"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
