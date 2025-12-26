@@ -251,16 +251,16 @@ const Landing = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
+            className="bg-stone-900 border-2 border-amber-700/50 rounded-3xl p-8 max-w-md w-full shadow-2xl"
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-fraunces font-bold text-textPrimary">
+              <h3 className="text-2xl font-serif font-bold text-amber-50">
                 {isLogin ? 'Welcome Back' : 'Join Kulikari'}
               </h3>
               <button
                 data-testid="close-auth-modal-btn"
                 onClick={() => setShowAuth(false)}
-                className="text-textMuted hover:text-textPrimary"
+                className="text-amber-300 hover:text-amber-100"
               >
                 ✕
               </button>
@@ -268,36 +268,36 @@ const Landing = () => {
             <form data-testid="auth-form" onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <div>
-                  <label className="block text-sm font-nunito font-semibold text-textSecondary mb-2">Name</label>
+                  <label className="block text-sm font-semibold text-amber-200 mb-2">Name</label>
                   <input
                     data-testid="name-input"
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-[#F0F2F5] border-transparent focus:border-coral focus:bg-white focus:outline-none focus:ring-2 focus:ring-coral/20 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-stone-800 border-amber-700 text-amber-50 placeholder-amber-400/50 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"
                     required={!isLogin}
                   />
                 </div>
               )}
               <div>
-                <label className="block text-sm font-nunito font-semibold text-textSecondary mb-2">Email</label>
+                <label className="block text-sm font-semibold text-amber-200 mb-2">Email</label>
                 <input
                   data-testid="email-input"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#F0F2F5] border-transparent focus:border-coral focus:bg-white focus:outline-none focus:ring-2 focus:ring-coral/20 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-stone-800 border-amber-700 text-amber-50 placeholder-amber-400/50 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-nunito font-semibold text-textSecondary mb-2">Password</label>
+                <label className="block text-sm font-semibold text-amber-200 mb-2">Password</label>
                 <input
                   data-testid="password-input"
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#F0F2F5] border-transparent focus:border-coral focus:bg-white focus:outline-none focus:ring-2 focus:ring-coral/20 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-stone-800 border-amber-700 text-amber-50 placeholder-amber-400/50 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"
                   required
                 />
               </div>
@@ -305,17 +305,17 @@ const Landing = () => {
                 data-testid="submit-auth-btn"
                 type="submit"
                 disabled={loading}
-                className="w-full bg-coral text-white py-3 rounded-full font-nunito font-semibold hover:bg-[#FF8787] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white py-3 rounded-full font-semibold hover:from-amber-700 hover:to-orange-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
               >
                 {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
               </button>
             </form>
-            <p className="text-center mt-6 text-textSecondary font-nunito">
+            <p className="text-center mt-6 text-amber-200">
               {isLogin ? "Don't have an account? " : 'Already have an account? '}
               <button
                 data-testid="toggle-auth-mode-btn"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-coral font-semibold hover:underline"
+                className="text-amber-400 font-semibold hover:text-amber-300 hover:underline"
               >
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </button>
