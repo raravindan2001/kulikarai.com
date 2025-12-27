@@ -422,6 +422,331 @@ async def get_family_tree(user_id: str = Depends(get_current_user)):
     users = await db.users.find({}, {"_id": 0, "password": 0, "email": 0}).to_list(1000)
     return {"users": users}
 
+# ==================== INDUSTRY-STANDARD FAMILY TREE APIs ====================
+
+@api_router.get("/family-members")
+async def get_all_family_members(user_id: str = Depends(get_current_user)):
+    """Get all family members with proper hierarchical structure"""
+    members = await db.family_members.find({}, {"_id": 0}).to_list(1000)
+    return {"members": members}
+
+@api_router.post("/family-members")
+async def create_family_member(member: FamilyMemberCreate, user_id: str = Depends(get_current_user)):
+    """Create a new family member with proper parent/spouse IDs"""
+    # Check for duplicate by name (case-insensitive)
+    existing = await db.family_members.find_one(
+        {"name": {"$regex": f"^{member.name}$", "$options": "i"}},
+        {"_id": 0}
+    )
+    if existing:
+        raise HTTPException(status_code=400, detail=f"A family member named '{member.name}' already exists")
+    
+    member_id = str(uuid.uuid4())
+    member_doc = {
+        "id": member_id,
+        "name": member.name,
+        "gender": member.gender or "unknown",
+        "birth_date": member.birth_date or "",
+        "death_date": member.death_date or "",
+        "father_id": member.father_id or "",
+        "mother_id": member.mother_id or "",
+        "spouse_id": member.spouse_id or "",
+        "bio": member.bio or "",
+        "photo_url": member.photo_url or "",
+        "created_by": user_id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.family_members.insert_one(member_doc)
+    
+    # If spouse_id is set, update the spouse's spouse_id to this member
+    if member.spouse_id:
+        await db.family_members.update_one(
+            {"id": member.spouse_id, "spouse_id": ""},
+            {"$set": {"spouse_id": member_id}}
+        )
+    
+    return {"message": "Family member created", "member": {k: v for k, v in member_doc.items() if k != "_id"}}
+
+@api_router.get("/family-members/{member_id}")
+async def get_family_member(member_id: str, user_id: str = Depends(get_current_user)):
+    """Get a specific family member with derived relationships"""
+    member = await db.family_members.find_one({"id": member_id}, {"_id": 0})
+    if not member:
+        raise HTTPException(status_code=404, detail="Family member not found")
+    
+    # Get derived relationships
+    children = await db.family_members.find(
+        {"$or": [{"father_id": member_id}, {"mother_id": member_id}]},
+        {"_id": 0, "id": 1, "name": 1, "gender": 1}
+    ).to_list(100)
+    
+    siblings = []
+    if member.get("father_id") or member.get("mother_id"):
+        sibling_query = {"id": {"$ne": member_id}}
+        if member.get("father_id"):
+            sibling_query["$or"] = [{"father_id": member["father_id"]}]
+        if member.get("mother_id"):
+            if "$or" in sibling_query:
+                sibling_query["$or"].append({"mother_id": member["mother_id"]})
+            else:
+                sibling_query["$or"] = [{"mother_id": member["mother_id"]}]
+        siblings = await db.family_members.find(sibling_query, {"_id": 0, "id": 1, "name": 1, "gender": 1}).to_list(100)
+    
+    # Get parents
+    father = None
+    mother = None
+    spouse = None
+    if member.get("father_id"):
+        father = await db.family_members.find_one({"id": member["father_id"]}, {"_id": 0, "id": 1, "name": 1, "gender": 1})
+    if member.get("mother_id"):
+        mother = await db.family_members.find_one({"id": member["mother_id"]}, {"_id": 0, "id": 1, "name": 1, "gender": 1})
+    if member.get("spouse_id"):
+        spouse = await db.family_members.find_one({"id": member["spouse_id"]}, {"_id": 0, "id": 1, "name": 1, "gender": 1})
+    
+    member["derived_relations"] = {
+        "father": father,
+        "mother": mother,
+        "spouse": spouse,
+        "children": children,
+        "siblings": siblings
+    }
+    
+    return member
+
+@api_router.put("/family-members/{member_id}")
+async def update_family_member(member_id: str, update: FamilyMemberUpdate, user_id: str = Depends(get_current_user)):
+    """Update a family member's information"""
+    member = await db.family_members.find_one({"id": member_id}, {"_id": 0})
+    if not member:
+        raise HTTPException(status_code=404, detail="Family member not found")
+    
+    update_data = {k: v for k, v in update.model_dump().items() if v is not None}
+    
+    # Handle spouse relationship bidirectionally
+    if "spouse_id" in update_data:
+        new_spouse_id = update_data["spouse_id"]
+        old_spouse_id = member.get("spouse_id")
+        
+        # Remove this member as spouse from old spouse
+        if old_spouse_id and old_spouse_id != new_spouse_id:
+            await db.family_members.update_one(
+                {"id": old_spouse_id},
+                {"$set": {"spouse_id": ""}}
+            )
+        
+        # Set this member as spouse of new spouse
+        if new_spouse_id:
+            await db.family_members.update_one(
+                {"id": new_spouse_id},
+                {"$set": {"spouse_id": member_id}}
+            )
+    
+    if update_data:
+        await db.family_members.update_one({"id": member_id}, {"$set": update_data})
+    
+    return {"message": "Family member updated"}
+
+@api_router.delete("/family-members/{member_id}")
+async def delete_family_member(member_id: str, user_id: str = Depends(get_current_user)):
+    """Delete a family member and clean up references"""
+    member = await db.family_members.find_one({"id": member_id}, {"_id": 0})
+    if not member:
+        raise HTTPException(status_code=404, detail="Family member not found")
+    
+    # Remove this member as parent from all children
+    await db.family_members.update_many(
+        {"father_id": member_id},
+        {"$set": {"father_id": ""}}
+    )
+    await db.family_members.update_many(
+        {"mother_id": member_id},
+        {"$set": {"mother_id": ""}}
+    )
+    
+    # Remove this member as spouse
+    if member.get("spouse_id"):
+        await db.family_members.update_one(
+            {"id": member["spouse_id"]},
+            {"$set": {"spouse_id": ""}}
+        )
+    
+    await db.family_members.delete_one({"id": member_id})
+    return {"message": "Family member deleted"}
+
+@api_router.get("/family-tree-hierarchical")
+async def get_family_tree_hierarchical(user_id: str = Depends(get_current_user)):
+    """Get family tree in hierarchical format optimized for visualization"""
+    members = await db.family_members.find({}, {"_id": 0}).to_list(1000)
+    
+    # Create lookup maps
+    members_map = {m["id"]: m for m in members}
+    
+    # Find root members (those without parents in the tree)
+    root_members = [m for m in members if not m.get("father_id") and not m.get("mother_id")]
+    
+    # Build nodes and edges for react-flow
+    nodes = []
+    edges = []
+    processed_couples = set()
+    
+    for member in members:
+        # Create node for each member
+        nodes.append({
+            "id": member["id"],
+            "data": {
+                "name": member["name"],
+                "gender": member.get("gender", "unknown"),
+                "birth_date": member.get("birth_date", ""),
+                "death_date": member.get("death_date", ""),
+                "photo_url": member.get("photo_url", ""),
+                "spouse_id": member.get("spouse_id", ""),
+                "father_id": member.get("father_id", ""),
+                "mother_id": member.get("mother_id", "")
+            }
+        })
+        
+        # Create parent-child edges
+        if member.get("father_id"):
+            edges.append({
+                "id": f"father-{member['father_id']}-{member['id']}",
+                "source": member["father_id"],
+                "target": member["id"],
+                "type": "parent-child",
+                "label": "Father"
+            })
+        
+        if member.get("mother_id"):
+            edges.append({
+                "id": f"mother-{member['mother_id']}-{member['id']}",
+                "source": member["mother_id"],
+                "target": member["id"],
+                "type": "parent-child",
+                "label": "Mother"
+            })
+        
+        # Create spouse edges (only once per couple)
+        if member.get("spouse_id"):
+            couple_key = tuple(sorted([member["id"], member["spouse_id"]]))
+            if couple_key not in processed_couples:
+                processed_couples.add(couple_key)
+                edges.append({
+                    "id": f"spouse-{member['id']}-{member['spouse_id']}",
+                    "source": member["id"],
+                    "target": member["spouse_id"],
+                    "type": "spouse",
+                    "label": "Spouse"
+                })
+    
+    # Calculate generations
+    def get_generation(member_id, cache={}):
+        if member_id in cache:
+            return cache[member_id]
+        member = members_map.get(member_id)
+        if not member:
+            return 0
+        father_gen = get_generation(member.get("father_id"), cache) if member.get("father_id") else -1
+        mother_gen = get_generation(member.get("mother_id"), cache) if member.get("mother_id") else -1
+        gen = max(father_gen, mother_gen) + 1
+        cache[member_id] = gen
+        return gen
+    
+    generations = {}
+    for member in members:
+        gen = get_generation(member["id"])
+        if gen not in generations:
+            generations[gen] = []
+        generations[gen].append(member["id"])
+    
+    return {
+        "nodes": nodes,
+        "edges": edges,
+        "generations": generations,
+        "root_members": [m["id"] for m in root_members],
+        "total_members": len(members)
+    }
+
+@api_router.post("/family-members/link-spouse")
+async def link_spouse(data: dict, user_id: str = Depends(get_current_user)):
+    """Link two members as spouses"""
+    member1_id = data.get("member1_id")
+    member2_id = data.get("member2_id")
+    
+    if not member1_id or not member2_id:
+        raise HTTPException(status_code=400, detail="Both member IDs are required")
+    
+    member1 = await db.family_members.find_one({"id": member1_id}, {"_id": 0})
+    member2 = await db.family_members.find_one({"id": member2_id}, {"_id": 0})
+    
+    if not member1 or not member2:
+        raise HTTPException(status_code=404, detail="One or both members not found")
+    
+    # Update both members
+    await db.family_members.update_one({"id": member1_id}, {"$set": {"spouse_id": member2_id}})
+    await db.family_members.update_one({"id": member2_id}, {"$set": {"spouse_id": member1_id}})
+    
+    return {"message": "Spouses linked successfully"}
+
+@api_router.post("/family-members/set-parents")
+async def set_parents(data: dict, user_id: str = Depends(get_current_user)):
+    """Set parents for a family member"""
+    member_id = data.get("member_id")
+    father_id = data.get("father_id")
+    mother_id = data.get("mother_id")
+    
+    if not member_id:
+        raise HTTPException(status_code=400, detail="Member ID is required")
+    
+    member = await db.family_members.find_one({"id": member_id}, {"_id": 0})
+    if not member:
+        raise HTTPException(status_code=404, detail="Member not found")
+    
+    update_data = {}
+    if father_id is not None:
+        update_data["father_id"] = father_id
+    if mother_id is not None:
+        update_data["mother_id"] = mother_id
+    
+    if update_data:
+        await db.family_members.update_one({"id": member_id}, {"$set": update_data})
+    
+    return {"message": "Parents updated successfully"}
+
+# ==================== WELL DONE / APPRECIATION endpoints ====================
+
+@api_router.post("/well-done")
+async def create_well_done(post_data: dict, user_id: str = Depends(get_current_user)):
+    """Create a Well Done appreciation post"""
+    post_id = str(uuid.uuid4())
+    user = await db.users.find_one({"id": user_id}, {"_id": 0, "name": 1})
+    post_doc = {
+        "id": post_id,
+        "user_id": user_id,
+        "user_name": user.get("name", "Unknown") if user else "Unknown",
+        "recipient_name": post_data.get("recipient_name"),
+        "title": post_data.get("title"),
+        "description": post_data.get("description"),
+        "category": post_data.get("category", "general"),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.well_done.insert_one(post_doc)
+    return post_doc
+
+@api_router.get("/well-done")
+async def get_well_done_posts(user_id: str = Depends(get_current_user)):
+    """Get all Well Done appreciation posts"""
+    posts = await db.well_done.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return posts
+
+@api_router.delete("/well-done/{post_id}")
+async def delete_well_done(post_id: str, user_id: str = Depends(get_current_user)):
+    """Delete a Well Done post"""
+    post = await db.well_done.find_one({"id": post_id}, {"_id": 0})
+    if not post or post['user_id'] != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.well_done.delete_one({"id": post_id})
+    return {"message": "Post deleted"}
+
 @api_router.get("/users")
 async def search_users(query: str = Query(""), current_user: str = Depends(get_current_user)):
     if query:
