@@ -101,6 +101,29 @@ class RelationshipAdd(BaseModel):
     user_id: str
     relation_type: str  # parent, sibling, child, spouse, etc.
 
+# Industry-standard Family Tree Models
+class FamilyMemberCreate(BaseModel):
+    name: str
+    gender: Optional[str] = "unknown"  # male, female, unknown
+    birth_date: Optional[str] = None
+    death_date: Optional[str] = None
+    father_id: Optional[str] = None
+    mother_id: Optional[str] = None
+    spouse_id: Optional[str] = None
+    bio: Optional[str] = None
+    photo_url: Optional[str] = None
+
+class FamilyMemberUpdate(BaseModel):
+    name: Optional[str] = None
+    gender: Optional[str] = None
+    birth_date: Optional[str] = None
+    death_date: Optional[str] = None
+    father_id: Optional[str] = None
+    mother_id: Optional[str] = None
+    spouse_id: Optional[str] = None
+    bio: Optional[str] = None
+    photo_url: Optional[str] = None
+
 class PhotoCreate(BaseModel):
     caption: Optional[str] = None
     album_id: Optional[str] = None
