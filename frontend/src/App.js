@@ -89,8 +89,17 @@ function App() {
             <Route path="/photos/:photoId" element={user ? <PhotoDetail /> : <Navigate to="/" />} />
             <Route path="/messages/:conversationId?" element={user ? <Messages /> : <Navigate to="/" />} />
             <Route path="/events" element={user ? <Events /> : <Navigate to="/" />} />
-            <Route path="/family-tree" element={user ? <FamilyTree /> : <Navigate to="/" />} />
+            <Route path="/family-tree" element={user ? <FamilyTreeNew /> : <Navigate to="/" />} />
+            <Route path="/family-tree-old" element={user ? <FamilyTree /> : <Navigate to="/" />} />
             <Route path="/settings" element={user ? <Settings /> : <Navigate to="/" />} />
+            <Route path="/home-remedies" element={user ? <HomeRemedies /> : <Navigate to="/" />} />
+            <Route path="/cooking-tips" element={user ? <CookingTips /> : <Navigate to="/" />} />
+            <Route path="/divine-updates" element={user ? <DivineUpdates /> : <Navigate to="/" />} />
+            <Route path="/book-reviews" element={user ? <BookReviews /> : <Navigate to="/" />} />
+            <Route path="/hobbies" element={user ? <Hobbies /> : <Navigate to="/" />} />
+            <Route path="/gaming-space" element={user ? <GamingSpace /> : <Navigate to="/" />} />
+            <Route path="/tournaments" element={user ? <Tournaments /> : <Navigate to="/" />} />
+            <Route path="/well-done" element={user ? <WellDone /> : <Navigate to="/" />} />
           </Routes>
         </BrowserRouter>
         <Toaster position="top-center" />
