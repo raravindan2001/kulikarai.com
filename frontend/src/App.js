@@ -101,6 +101,7 @@ function App() {
             <Route path="/gaming-space" element={user ? <GamingSpace /> : <Navigate to="/" />} />
             <Route path="/tournaments" element={user ? <Tournaments /> : <Navigate to="/" />} />
             <Route path="/well-done" element={user ? <WellDone /> : <Navigate to="/" />} />
+            <Route path="/kolam-tips" element={user ? <KolamTips /> : <Navigate to="/" />} />
           </Routes>
         </BrowserRouter>
         <Toaster position="top-center" />
