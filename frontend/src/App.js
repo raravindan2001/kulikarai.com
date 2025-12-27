@@ -23,6 +23,7 @@ import Hobbies from './pages/Hobbies';
 import GamingSpace from './pages/GamingSpace';
 import Tournaments from './pages/Tournaments';
 import WellDone from './pages/WellDone';
+import KolamTips from './pages/KolamTips';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
