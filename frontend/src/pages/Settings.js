@@ -28,11 +28,12 @@ const Settings = () => {
   const contentSections = [
     { icon: Users, title: 'Family Tree', desc: 'View and manage your family tree', link: '/family-tree', color: 'from-blue-500 to-purple-500', emoji: '🌳' },
     { icon: Sun, title: 'Divine Updates', desc: 'Spiritual and religious updates', link: '/divine-updates', color: 'from-yellow-500 to-orange-500', emoji: '🙏' },
+    { icon: Sun, title: 'Perumal Utsavam', desc: 'Temple festivals and events', link: '/perumal-utsavam', color: 'from-amber-500 to-yellow-500', emoji: '🛕' },
     { icon: Heart, title: 'Home Remedies', desc: 'Traditional home remedies', link: '/home-remedies', color: 'from-green-500 to-emerald-500', emoji: '🌿' },
     { icon: UtensilsCrossed, title: 'Cooking Tips', desc: 'Family recipes and cooking tips', link: '/cooking-tips', color: 'from-orange-500 to-red-500', emoji: '👨‍🍳' },
     { icon: Flower2, title: 'Kolam Tips', desc: 'Traditional kolam patterns', link: '/kolam-tips', color: 'from-pink-500 to-rose-500', emoji: '🎨' },
     { icon: BookOpen, title: 'Book Reviews', desc: 'Share and discover books', link: '/book-reviews', color: 'from-indigo-500 to-purple-500', emoji: '📚' },
-    { icon: Palette, title: 'Hobbies', desc: 'Share your hobbies and interests', link: '/hobbies', color: 'from-teal-500 to-cyan-500', emoji: '🎨' },
+    { icon: Palette, title: 'Hobbies', desc: 'Share your hobbies and interests', link: '/hobbies', color: 'from-teal-500 to-cyan-500', emoji: '🎭' },
     { icon: Gamepad2, title: 'Gaming Space', desc: 'Online gaming discussions', link: '/gaming-space', color: 'from-violet-500 to-fuchsia-500', emoji: '🎮' },
     { icon: Trophy, title: 'Tournaments', desc: 'Family internal tournaments', link: '/tournaments', color: 'from-amber-500 to-orange-500', emoji: '🏆' },
     { icon: Award, title: 'Well Done', desc: 'Appreciate family members', link: '/well-done', color: 'from-rose-500 to-pink-500', emoji: '👏' },
