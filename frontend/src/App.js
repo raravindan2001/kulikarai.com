@@ -13,7 +13,16 @@ import PhotoDetail from './pages/PhotoDetail';
 import Messages from './pages/Messages';
 import Events from './pages/Events';
 import FamilyTree from './pages/FamilyTree';
+import FamilyTreeNew from './pages/FamilyTreeNew';
 import Settings from './pages/Settings';
+import HomeRemedies from './pages/HomeRemedies';
+import CookingTips from './pages/CookingTips';
+import DivineUpdates from './pages/DivineUpdates';
+import BookReviews from './pages/BookReviews';
+import Hobbies from './pages/Hobbies';
+import GamingSpace from './pages/GamingSpace';
+import Tournaments from './pages/Tournaments';
+import WellDone from './pages/WellDone';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
