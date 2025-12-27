@@ -917,6 +917,171 @@ async def delete_utsavam(utsavam_id: str, user_id: str = Depends(get_current_use
     await db.perumal_utsavam.delete_one({"id": utsavam_id})
     return {"message": "Utsavam deleted"}
 
+# Book Review endpoints
+@api_router.post("/book-reviews")
+async def create_book_review(review_data: dict, user_id: str = Depends(get_current_user)):
+    review_id = str(uuid.uuid4())
+    review_doc = {
+        "id": review_id,
+        "user_id": user_id,
+        "user_name": (await db.users.find_one({"id": user_id}, {"_id": 0}))['name'],
+        "book_title": review_data.get("book_title"),
+        "author": review_data.get("author"),
+        "rating": review_data.get("rating", 5),
+        "review": review_data.get("review"),
+        "genre": review_data.get("genre", ""),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.book_reviews.insert_one(review_doc)
+    return review_doc
+
+@api_router.get("/book-reviews")
+async def get_book_reviews(user_id: str = Depends(get_current_user)):
+    reviews = await db.book_reviews.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return reviews
+
+@api_router.delete("/book-reviews/{review_id}")
+async def delete_book_review(review_id: str, user_id: str = Depends(get_current_user)):
+    review = await db.book_reviews.find_one({"id": review_id}, {"_id": 0})
+    if not review or review['user_id'] != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.book_reviews.delete_one({"id": review_id})
+    return {"message": "Review deleted"}
+
+# Hobbies endpoints
+@api_router.post("/hobbies")
+async def create_hobby(hobby_data: dict, user_id: str = Depends(get_current_user)):
+    hobby_id = str(uuid.uuid4())
+    hobby_doc = {
+        "id": hobby_id,
+        "user_id": user_id,
+        "user_name": (await db.users.find_one({"id": user_id}, {"_id": 0}))['name'],
+        "title": hobby_data.get("title"),
+        "category": hobby_data.get("category", "general"),
+        "description": hobby_data.get("description"),
+        "skill_level": hobby_data.get("skill_level", "beginner"),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.hobbies.insert_one(hobby_doc)
+    return hobby_doc
+
+@api_router.get("/hobbies")
+async def get_hobbies(user_id: str = Depends(get_current_user)):
+    hobbies = await db.hobbies.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return hobbies
+
+@api_router.delete("/hobbies/{hobby_id}")
+async def delete_hobby(hobby_id: str, user_id: str = Depends(get_current_user)):
+    hobby = await db.hobbies.find_one({"id": hobby_id}, {"_id": 0})
+    if not hobby or hobby['user_id'] != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.hobbies.delete_one({"id": hobby_id})
+    return {"message": "Hobby deleted"}
+
+# Gaming Space endpoints
+@api_router.post("/gaming-space")
+async def create_gaming_post(post_data: dict, user_id: str = Depends(get_current_user)):
+    post_id = str(uuid.uuid4())
+    post_doc = {
+        "id": post_id,
+        "user_id": user_id,
+        "user_name": (await db.users.find_one({"id": user_id}, {"_id": 0}))['name'],
+        "game_name": post_data.get("game_name"),
+        "content": post_data.get("content"),
+        "score": post_data.get("score", ""),
+        "game_type": post_data.get("game_type", "online"),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.gaming_space.insert_one(post_doc)
+    return post_doc
+
+@api_router.get("/gaming-space")
+async def get_gaming_posts(user_id: str = Depends(get_current_user)):
+    posts = await db.gaming_space.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return posts
+
+@api_router.delete("/gaming-space/{post_id}")
+async def delete_gaming_post(post_id: str, user_id: str = Depends(get_current_user)):
+    post = await db.gaming_space.find_one({"id": post_id}, {"_id": 0})
+    if not post or post['user_id'] != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.gaming_space.delete_one({"id": post_id})
+    return {"message": "Post deleted"}
+
+# Tournaments endpoints
+@api_router.post("/tournaments")
+async def create_tournament(tournament_data: dict, user_id: str = Depends(get_current_user)):
+    tournament_id = str(uuid.uuid4())
+    tournament_doc = {
+        "id": tournament_id,
+        "user_id": user_id,
+        "user_name": (await db.users.find_one({"id": user_id}, {"_id": 0}))['name'],
+        "name": tournament_data.get("name"),
+        "game": tournament_data.get("game"),
+        "start_date": tournament_data.get("start_date"),
+        "participants": tournament_data.get("participants", []),
+        "winner": tournament_data.get("winner", ""),
+        "status": tournament_data.get("status", "upcoming"),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.tournaments.insert_one(tournament_doc)
+    return tournament_doc
+
+@api_router.get("/tournaments")
+async def get_tournaments(user_id: str = Depends(get_current_user)):
+    tournaments = await db.tournaments.find({}, {"_id": 0}).sort("start_date", -1).to_list(100)
+    return tournaments
+
+@api_router.put("/tournaments/{tournament_id}")
+async def update_tournament(tournament_id: str, update_data: dict, user_id: str = Depends(get_current_user)):
+    tournament = await db.tournaments.find_one({"id": tournament_id}, {"_id": 0})
+    if not tournament:
+        raise HTTPException(status_code=404, detail="Tournament not found")
+    
+    await db.tournaments.update_one(
+        {"id": tournament_id},
+        {"$set": update_data}
+    )
+    return {"message": "Tournament updated"}
+
+@api_router.delete("/tournaments/{tournament_id}")
+async def delete_tournament(tournament_id: str, user_id: str = Depends(get_current_user)):
+    tournament = await db.tournaments.find_one({"id": tournament_id}, {"_id": 0})
+    if not tournament or tournament['user_id'] != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.tournaments.delete_one({"id": tournament_id})
+    return {"message": "Tournament deleted"}
+
+# Achievements endpoints
+@api_router.post("/achievements")
+async def create_achievement(achievement_data: dict, user_id: str = Depends(get_current_user)):
+    achievement_id = str(uuid.uuid4())
+    achievement_doc = {
+        "id": achievement_id,
+        "user_id": user_id,
+        "user_name": (await db.users.find_one({"id": user_id}, {"_id": 0}))['name'],
+        "title": achievement_data.get("title"),
+        "description": achievement_data.get("description"),
+        "category": achievement_data.get("category", "personal"),
+        "date": achievement_data.get("date"),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.achievements.insert_one(achievement_doc)
+    return achievement_doc
+
+@api_router.get("/achievements")
+async def get_achievements(user_id: str = Depends(get_current_user)):
+    achievements = await db.achievements.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return achievements
+
+@api_router.delete("/achievements/{achievement_id}")
+async def delete_achievement(achievement_id: str, user_id: str = Depends(get_current_user)):
+    achievement = await db.achievements.find_one({"id": achievement_id}, {"_id": 0})
+    if not achievement or achievement['user_id'] != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.achievements.delete_one({"id": achievement_id})
+    return {"message": "Achievement deleted"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
