@@ -103,6 +103,7 @@ function App() {
             <Route path="/tournaments" element={user ? <Tournaments /> : <Navigate to="/" />} />
             <Route path="/well-done" element={user ? <WellDone /> : <Navigate to="/" />} />
             <Route path="/kolam-tips" element={user ? <KolamTips /> : <Navigate to="/" />} />
+            <Route path="/perumal-utsavam" element={user ? <PerumalUtsavam /> : <Navigate to="/" />} />
           </Routes>
         </BrowserRouter>
         <Toaster position="top-center" />
